@@ -19,10 +19,14 @@ function App() {
 
     // const [sortFlag, setSortFlag] = useState<boolean>(false)
     const [sortFlag, toggleSortFlag] = useBooleanState(false)
-    const filteredClients =
-        status === filterStatusValue.all
-            ? clients
-            : clients.filter((client) => client.status === status)
+
+    const filteredClients = useMemo(() => {
+        if (status === filterStatusValue.all) {
+            return clients
+        } else {
+            return clients.filter((client) => client.status === status)
+        }
+    }, [clients, status])
 
     const sortedAndFilteredClients = useMemo(() => {
         return [...filteredClients].sort((a, b) => a.name.localeCompare(b.name))

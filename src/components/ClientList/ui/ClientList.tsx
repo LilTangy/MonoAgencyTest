@@ -8,6 +8,7 @@ interface ClientListProps {
 }
 
 export const ClientList = memo(({ clients }: ClientListProps) => {
+    console.log("list was rendered")
     return (
         <div className={cls.clientList}>
             {clients.map((client) => (
