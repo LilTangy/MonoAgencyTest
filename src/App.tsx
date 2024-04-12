@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useMemo, useState } from "react"
+import "./App.css"
+import { ClientList } from "./components/ClientList"
+import dataClients from "./db"
+import { useBooleanState } from "./hooks/useBooleanState"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+enum filterStatusValue {
+    all = "all",
+    active = "active",
+    inactive = "inactive",
 }
 
-export default App;
+function App() {
+    const [clients, setClients] = useState(dataClients)
+
+    const [status, setStatus] = useState<filterStatusValue>(
+        filterStatusValue.all,
+    )
+
+    // const [sortFlag, setSortFlag] = useState<boolean>(false)
+    const [sortFlag, toggleSortFlag] = useBooleanState(false)
+    const filteredClients =
+        status === filterStatusValue.all
+            ? clients
+            : clients.filter((client) => client.status === status)
+
+    const sortedAndFilteredClients = useMemo(() => {
+        return [...filteredClients].sort((a, b) => a.name.localeCompare(b.name))
+    }, [filteredClients])
+
+    return (
+        <div className="App">
+            <h1>CRM System</h1>
+            <div>
+                <button onClick={() => setStatus(filterStatusValue.all)}>
+                    All
+                </button>
+                <button onClick={() => setStatus(filterStatusValue.active)}>
+                    Active
+                </button>
+                <button onClick={() => setStatus(filterStatusValue.inactive)}>
+                    Inactive
+                </button>
+                <button onClick={toggleSortFlag}>Sort array</button>
+            </div>
+            {sortFlag ? (
+                <ClientList clients={sortedAndFilteredClients} />
+            ) : (
+                <ClientList clients={filteredClients} />
+            )}
+        </div>
+    )
+}
+
+export default App

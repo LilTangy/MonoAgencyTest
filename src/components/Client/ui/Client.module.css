@@ -1,0 +1,12 @@
+.clientCard {
+    width: 250px;
+    margin: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ececec;
+    transition: box-shadow 0.3s ease-in-out;
+}
+.clientCard:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
